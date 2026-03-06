@@ -8,7 +8,7 @@ NEXUS_URL = "http://localhost:8081/repository/ci-artifacts"
 
 stages {
 
-```
+
 stage('Checkout Code') {
     steps {
         checkout scm
@@ -126,7 +126,7 @@ always {
     echo "Cleaning Jenkins workspace"
     cleanWs()
 }
-```
+
 
 }
 
