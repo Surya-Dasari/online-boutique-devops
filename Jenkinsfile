@@ -88,7 +88,7 @@ stages {
         steps {
 
             withCredentials([usernamePassword(
-                credentialsId: 'jenkins/nexus-creds',
+                credentialsId: 'nexus-creds-latest',
                 usernameVariable: 'NEXUS_USER',
                 passwordVariable: 'NEXUS_PASS'
             )]) {
