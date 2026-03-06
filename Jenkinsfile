@@ -5,28 +5,38 @@ agent any
 
 stages {
 
-    stage('Checkout') {
+    stage('Checkout Source Code') {
         steps {
-            git 'https://github.com/Surya-Dasari/online-boutique-devops.git'
+            checkout scm
         }
     }
 
     stage('Build Go Services') {
         steps {
             sh '''
-            cd src/frontend && go build -o frontend .
-            cd ../productcatalogservice && go build -o productcatalogservice .
-            cd ../checkoutservice && go build -o checkoutservice .
-            cd ../shippingservice && go build -o shippingservice .
+            cd src/frontend
+            go build -o frontend .
+
+            cd ../productcatalogservice
+            go build -o productcatalogservice .
+
+            cd ../checkoutservice
+            go build -o checkoutservice .
+
+            cd ../shippingservice
+            go build -o shippingservice .
             '''
         }
     }
 
-    stage('Build Node Services') {
+    stage('Build NodeJS Services') {
         steps {
             sh '''
-            cd src/currencyservice && npm install
-            cd ../paymentservice && npm install
+            cd src/currencyservice
+            npm install
+
+            cd ../paymentservice
+            npm install
             '''
         }
     }
@@ -34,10 +44,17 @@ stages {
     stage('Build Python Services') {
         steps {
             sh '''
-            cd src/emailservice && pip install -r requirements.txt
-            cd ../recommendationservice && pip install -r requirements.txt
-            cd ../shoppingassistantservice && pip install -r requirements.txt
-            cd ../loadgenerator && pip install -r requirements.txt
+            cd src/emailservice
+            pip install -r requirements.txt
+
+            cd ../recommendationservice
+            pip install -r requirements.txt
+
+            cd ../shoppingassistantservice
+            pip install -r requirements.txt
+
+            cd ../loadgenerator
+            pip install -r requirements.txt
             '''
         }
     }
