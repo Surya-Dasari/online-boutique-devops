@@ -1,10 +1,6 @@
 pipeline {
 agent any
 
-tools {
-    jdk 'jdk21'
-}
-
 stages {
 
     stage('Checkout Code') {
