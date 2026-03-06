@@ -1,6 +1,7 @@
 pipeline {
 agent any
 
+
 stages {
 
     stage('Checkout Code') {
@@ -9,82 +10,51 @@ stages {
         }
     }
 
+    stage('Prepare Scripts') {
+        steps {
+            sh 'chmod +x scripts/*.sh'
+        }
+    }
+
     stage('Build Microservices') {
+
         parallel {
 
             stage('Build Go Services') {
                 steps {
-                    sh '''
-                    cd src/frontend
-                    go build -o frontend .
-
-                    cd ../productcatalogservice
-                    go build -o productcatalogservice .
-
-                    cd ../shippingservice
-                    go build -o shippingservice .
-
-                    cd ../checkoutservice
-                    go build -o checkoutservice .
-                    '''
+                    sh './scripts/build-go.sh'
                 }
             }
 
-            stage('Build Node Services') {
+            stage('Build NodeJS Services') {
                 steps {
-                    sh '''
-                    cd src/currencyservice
-                    npm install
-
-                    cd ../paymentservice
-                    npm install
-                    '''
+                    sh './scripts/build-node.sh'
                 }
             }
 
             stage('Build Python Services') {
                 steps {
-                    sh '''
-                    python3 -m venv venv
-                    . venv/bin/activate
-
-                    cd src/emailservice
-                    pip install -r requirements.txt
-
-                    cd ../recommendationservice
-                    pip install -r requirements.txt
-
-                    cd ../shoppingassistantservice
-                    pip install -r requirements.txt
-
-                    cd ../loadgenerator
-                    pip install -r requirements.txt
-                    '''
+                    sh './scripts/build-python.sh'
                 }
             }
 
             stage('Build .NET Service') {
                 steps {
-                    sh '''
-                    cd src/cartservice/src
-                    dotnet restore
-                    dotnet build
-                    '''
+                    sh './scripts/build-dotnet.sh'
                 }
             }
 
             stage('Build Java Service') {
                 steps {
-                    sh '''
-                    cd src/adservice
-                    chmod +x gradlew
-                    ./gradlew build -x verifyGoogleJavaFormat
-                    '''
+                    sh './scripts/build-java.sh'
                 }
             }
 
         }
+
     }
+
 }
+
 
 }
