@@ -1,0 +1,67 @@
+pipeline {
+
+```
+agent any
+
+stages {
+
+    stage('Checkout') {
+        steps {
+            git 'https://github.com/Surya-Dasari/online-boutique-devops.git'
+        }
+    }
+
+    stage('Build Go Services') {
+        steps {
+            sh '''
+            cd src/frontend && go build -o frontend .
+            cd ../productcatalogservice && go build -o productcatalogservice .
+            cd ../checkoutservice && go build -o checkoutservice .
+            cd ../shippingservice && go build -o shippingservice .
+            '''
+        }
+    }
+
+    stage('Build Node Services') {
+        steps {
+            sh '''
+            cd src/currencyservice && npm install
+            cd ../paymentservice && npm install
+            '''
+        }
+    }
+
+    stage('Build Python Services') {
+        steps {
+            sh '''
+            cd src/emailservice && pip install -r requirements.txt
+            cd ../recommendationservice && pip install -r requirements.txt
+            cd ../shoppingassistantservice && pip install -r requirements.txt
+            cd ../loadgenerator && pip install -r requirements.txt
+            '''
+        }
+    }
+
+    stage('Build .NET Service') {
+        steps {
+            sh '''
+            cd src/cartservice/src
+            dotnet publish -c Release -o publish
+            '''
+        }
+    }
+
+    stage('Build Java Service') {
+        steps {
+            sh '''
+            cd src/adservice
+            ./gradlew build
+            '''
+        }
+    }
+
+}
+```
+
+}
+
