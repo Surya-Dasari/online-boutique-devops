@@ -3,7 +3,7 @@ agent any
 
 stages {
 
-    stage('Checkout Source Code') {
+    stage('Checkout Code') {
         steps {
             checkout scm
         }
@@ -18,11 +18,11 @@ stages {
             cd ../productcatalogservice
             go build -o productcatalogservice .
 
-            cd ../checkoutservice
-            go build -o checkoutservice .
-
             cd ../shippingservice
             go build -o shippingservice .
+
+            cd ../checkoutservice
+            go build -o checkoutservice .
             '''
         }
     }
@@ -39,35 +39,33 @@ stages {
         }
     }
 
-stage('Build Python Services') {
-steps {
-sh '''
-python3 -m venv venv
-. venv/bin/activate
+    stage('Build Python Services') {
+        steps {
+            sh '''
+            python3 -m venv venv
+            . venv/bin/activate
 
-```
-    cd src/emailservice
-    pip install -r requirements.txt
+            cd src/emailservice
+            pip install -r requirements.txt
 
-    cd ../recommendationservice
-    pip install -r requirements.txt
+            cd ../recommendationservice
+            pip install -r requirements.txt
 
-    cd ../shoppingassistantservice
-    pip install -r requirements.txt
+            cd ../shoppingassistantservice
+            pip install -r requirements.txt
 
-    cd ../loadgenerator
-    pip install -r requirements.txt
-    '''
-}
-```
-
-}
+            cd ../loadgenerator
+            pip install -r requirements.txt
+            '''
+        }
+    }
 
     stage('Build .NET Service') {
         steps {
             sh '''
             cd src/cartservice/src
-            dotnet publish -c Release -o publish
+            dotnet restore
+            dotnet build
             '''
         }
     }
@@ -84,4 +82,3 @@ python3 -m venv venv
 }
 
 }
-
