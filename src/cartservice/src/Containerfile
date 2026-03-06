@@ -1,0 +1,11 @@
+FROM registry.access.redhat.com/ubi9/dotnet-8-runtime
+
+WORKDIR /app
+
+COPY publish/ /app
+
+USER 1001
+
+EXPOSE 7070
+
+ENTRYPOINT ["dotnet","CartService.dll"]

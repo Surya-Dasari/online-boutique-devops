@@ -1,0 +1,13 @@
+FROM registry.access.redhat.com/ubi9/ubi-minimal
+
+WORKDIR /app
+
+COPY frontend /app/frontend
+
+RUN chmod +x /app/frontend
+
+USER 1001
+
+EXPOSE 8080
+
+ENTRYPOINT ["/app/frontend"]

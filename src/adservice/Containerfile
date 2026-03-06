@@ -1,0 +1,11 @@
+FROM registry.access.redhat.com/ubi9/openjdk-17
+
+WORKDIR /app
+
+COPY build/libs/adservice.jar /app/adservice.jar
+
+USER 1001
+
+EXPOSE 9555
+
+ENTRYPOINT ["java","-jar","/app/adservice.jar"]

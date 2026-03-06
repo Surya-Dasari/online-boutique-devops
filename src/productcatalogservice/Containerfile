@@ -1,0 +1,13 @@
+FROM registry.access.redhat.com/ubi9/ubi-minimal
+
+WORKDIR /app
+
+COPY productcatalogservice /app/productcatalogservice
+
+RUN chmod +x /app/productcatalogservice
+
+USER 1001
+
+EXPOSE 3550
+
+ENTRYPOINT ["/app/productcatalogservice"]

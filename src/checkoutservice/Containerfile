@@ -1,0 +1,13 @@
+FROM registry.access.redhat.com/ubi9/ubi-minimal
+
+WORKDIR /app
+
+COPY checkoutservice /app/checkoutservice
+
+RUN chmod +x /app/checkoutservice
+
+USER 1001
+
+EXPOSE 5050
+
+ENTRYPOINT ["/app/checkoutservice"]

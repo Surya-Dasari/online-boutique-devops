@@ -1,0 +1,13 @@
+FROM registry.access.redhat.com/ubi9/ubi-minimal
+
+WORKDIR /app
+
+COPY shippingservice /app/shippingservice
+
+RUN chmod +x /app/shippingservice
+
+USER 1001
+
+EXPOSE 50051
+
+ENTRYPOINT ["/app/shippingservice"]
