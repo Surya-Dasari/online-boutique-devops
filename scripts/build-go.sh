@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Building Go microservices"
+echo "Building Go services"
 
 SERVICES=(
 frontend
@@ -17,6 +17,8 @@ do
     cd src/$service
 
     VERSION=$(git rev-parse --short HEAD)
+
+    rm -f ${service}-*
 
     go build -o ${service}-${BUILD_NUMBER}-${VERSION}
 

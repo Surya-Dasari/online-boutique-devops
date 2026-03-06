@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Building NodeJS services"
+echo "Building Node services"
 
 SERVICES=(
 currencyservice
@@ -16,7 +16,11 @@ do
 
     npm install
 
+    VERSION=$(git rev-parse --short HEAD)
+
+    echo "${service}-${BUILD_NUMBER}-${VERSION}" > build-version.txt
+
     cd - > /dev/null
 done
 
-echo "NodeJS services build completed"
+echo "Node services build completed"

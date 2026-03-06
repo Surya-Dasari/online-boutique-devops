@@ -1,11 +1,13 @@
 #!/bin/bash
 set -e
 
-echo "Building .NET cartservice"
+echo "Building .NET service"
 
 cd src/cartservice/src
 
 dotnet restore
 dotnet build
 
-echo "Dotnet service build completed"
+VERSION=$(git rev-parse --short HEAD)
+
+cp bin/Debug/net8.0/cartservice.dll cartservice-${BUILD_NUMBER}-${VERSION}.dll

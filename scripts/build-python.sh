@@ -21,6 +21,10 @@ do
 
     pip install -r requirements.txt
 
+    VERSION=$(git rev-parse --short HEAD)
+
+    echo "${service}-${BUILD_NUMBER}-${VERSION}" > build-version.txt
+
     cd - > /dev/null
 done
 
