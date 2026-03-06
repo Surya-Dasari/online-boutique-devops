@@ -115,13 +115,13 @@ stage('Cleanup Old Nexus Artifacts') {
         }
     }
 }
-```
+
 
 }
 
 post {
 
-```
+
 always {
     echo "Cleaning Jenkins workspace"
     cleanWs()
