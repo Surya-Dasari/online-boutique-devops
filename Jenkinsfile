@@ -39,23 +39,29 @@ stages {
         }
     }
 
-    stage('Build Python Services') {
-        steps {
-            sh '''
-            cd src/emailservice
-            pip install -r requirements.txt
+stage('Build Python Services') {
+steps {
+sh '''
+python3 -m venv venv
+. venv/bin/activate
 
-            cd ../recommendationservice
-            pip install -r requirements.txt
+```
+    cd src/emailservice
+    pip install -r requirements.txt
 
-            cd ../shoppingassistantservice
-            pip install -r requirements.txt
+    cd ../recommendationservice
+    pip install -r requirements.txt
 
-            cd ../loadgenerator
-            pip install -r requirements.txt
-            '''
-        }
-    }
+    cd ../shoppingassistantservice
+    pip install -r requirements.txt
+
+    cd ../loadgenerator
+    pip install -r requirements.txt
+    '''
+}
+```
+
+}
 
     stage('Build .NET Service') {
         steps {
