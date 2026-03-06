@@ -1,10 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Building Python services"
-
-python3 -m venv venv
-source venv/bin/activate
+echo "Packaging Python services"
 
 SERVICES=(
 emailservice
@@ -15,17 +12,22 @@ loadgenerator
 
 for service in "${SERVICES[@]}"
 do
-    echo "Installing dependencies for $service"
+    echo "Preparing $service"
 
     cd src/$service
+
+    python3 -m venv venv
+    source venv/bin/activate
 
     pip install -r requirements.txt
 
     VERSION=$(git rev-parse --short HEAD)
 
-    echo "${service}-${BUILD_NUMBER}-${VERSION}" > build-version.txt
+    tar -czf ${service}-${BUILD_NUMBER}-${VERSION}.tar.gz *
+
+    deactivate
 
     cd - > /dev/null
 done
 
-echo "Python services build completed"
+echo "Python services packaged"

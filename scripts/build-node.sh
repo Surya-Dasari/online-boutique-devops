@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Building Node services"
+echo "Packaging NodeJS services"
 
 SERVICES=(
 currencyservice
@@ -10,7 +10,7 @@ paymentservice
 
 for service in "${SERVICES[@]}"
 do
-    echo "Installing dependencies for $service"
+    echo "Preparing $service"
 
     cd src/$service
 
@@ -18,9 +18,9 @@ do
 
     VERSION=$(git rev-parse --short HEAD)
 
-    echo "${service}-${BUILD_NUMBER}-${VERSION}" > build-version.txt
+    tar -czf ${service}-${BUILD_NUMBER}-${VERSION}.tar.gz *
 
     cd - > /dev/null
 done
 
-echo "Node services build completed"
+echo "Node services packaged"
