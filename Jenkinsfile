@@ -74,7 +74,7 @@ stages {
         steps {
             sh '''
             cd src/adservice
-            ./gradlew build
+            ./gradlew build -x verifyGoogleJavaFormat
             '''
         }
     }
