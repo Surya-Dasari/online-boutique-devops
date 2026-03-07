@@ -1,11 +1,11 @@
-FROM registry.access.redhat.com/ubi9/dotnet-8-runtime
+FROM registry.access.redhat.com/ubi9/dotnet-80-runtime
 
 WORKDIR /app
 
-COPY publish/ /app
+COPY cartservice-*.dll /app/cartservice.dll
 
 USER 1001
 
 EXPOSE 7070
 
-ENTRYPOINT ["dotnet","CartService.dll"]
+ENTRYPOINT ["dotnet","/app/cartservice.dll"]
