@@ -1,10 +1,8 @@
-FROM registry.access.redhat.com/ubi9/dotnet-80-runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 
 WORKDIR /app
 
 COPY cartservice-*.dll /app/cartservice.dll
-
-USER 1001
 
 EXPOSE 7070
 
