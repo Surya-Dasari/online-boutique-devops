@@ -3,40 +3,18 @@ set -e
 
 VERSION=${BUILD_NUMBER}-$(git rev-parse --short HEAD)
 
-SERVICES=(
-frontend
-productcatalogservice
-checkoutservice
-shippingservice
-currencyservice
-paymentservice
-emailservice
-recommendationservice
-shoppingassistantservice
-loadgenerator
-cartservice
-adservice
-)
+SERVICES=$(./scripts/detect-services.sh)
 
-echo "Building container images"
+echo "Detected services:"
+echo $SERVICES
 
-pids=()
-
-for service in "${SERVICES[@]}"
+for service in $SERVICES
 do
-    echo "Building $service"
+    echo "Building image for $service"
 
     podman build \
     -t localhost/$service:$VERSION \
-    src/$service &
-
-    pids+=($!)
+    src/$service
 done
 
-# wait for builds and detect failures
-for pid in "${pids[@]}"
-do
-    wait $pid
-done
-
-echo "All images built successfully"
+echo "All images built"

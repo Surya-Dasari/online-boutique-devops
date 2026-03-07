@@ -1,42 +1,21 @@
 #!/bin/bash
 set -e
 
-QUAY_REGISTRY="quay.io/suryadasari31"
-
 VERSION=${BUILD_NUMBER}-$(git rev-parse --short HEAD)
 
-SERVICES=(
-frontend
-productcatalogservice
-checkoutservice
-shippingservice
-currencyservice
-paymentservice
-emailservice
-recommendationservice
-shoppingassistantservice
-loadgenerator
-cartservice
-adservice
-)
+SERVICES=$(./scripts/detect-services.sh)
 
 echo "Logging into Quay"
-echo "$QUAY_PASS" | podman login quay.io -u "$QUAY_USER" --password-stdin
+podman login quay.io -u $QUAY_USER -p $QUAY_PASS
 
-for service in "${SERVICES[@]}"
+for service in $SERVICES
 do
-
-    echo "Tagging image $service"
+    echo "Pushing $service"
 
     podman tag \
     localhost/$service:$VERSION \
-    $QUAY_REGISTRY/$service:$VERSION
-
-    echo "Pushing image $service"
+    quay.io/suryadasari31/$service:$VERSION
 
     podman push \
-    $QUAY_REGISTRY/$service:$VERSION
-
+    quay.io/suryadasari31/$service:$VERSION
 done
-
-echo "All images pushed successfully"
