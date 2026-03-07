@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-VERSION=$(git rev-parse --short HEAD)
+VERSION=${BUILD_NUMBER}-$(git rev-parse --short HEAD)
 
 SERVICES=(
 frontend
@@ -12,11 +12,13 @@ shippingservice
 
 for service in "${SERVICES[@]}"
 do
-    echo "Building Go service $service"
+    echo "Building $service"
 
     cd src/$service
 
-    go build -o $service
+    go build -o ${service}-${VERSION}
 
     cd - > /dev/null
 done
+
+echo "Go services build completed"
