@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/root/RealProject/online-boutique-devops/src/cartservice/src/cartservice.csproj": {}
+    "/home/jenkins/online-boutique-devops/src/cartservice/cartservice.csproj": {}
   },
   "projects": {
-    "/root/RealProject/online-boutique-devops/src/cartservice/src/cartservice.csproj": {
+    "/home/jenkins/online-boutique-devops/src/cartservice/cartservice.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/root/RealProject/online-boutique-devops/src/cartservice/src/cartservice.csproj",
+        "projectUniqueName": "/home/jenkins/online-boutique-devops/src/cartservice/cartservice.csproj",
         "projectName": "cartservice",
-        "projectPath": "/root/RealProject/online-boutique-devops/src/cartservice/src/cartservice.csproj",
+        "projectPath": "/home/jenkins/online-boutique-devops/src/cartservice/cartservice.csproj",
         "packagesPath": "/root/.nuget/packages/",
-        "outputPath": "/root/RealProject/online-boutique-devops/src/cartservice/src/obj/",
+        "outputPath": "/home/jenkins/online-boutique-devops/src/cartservice/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/root/.nuget/NuGet/NuGet.Config"
@@ -38,29 +38,34 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "Google.Cloud.SecretManager.V1": {
+            "Google.Protobuf": {
               "target": "Package",
-              "version": "[2.7.0, )"
-            },
-            "Google.Cloud.Spanner.Data": {
-              "target": "Package",
-              "version": "[5.12.0, )"
+              "version": "[3.25.1, )"
             },
             "Grpc.AspNetCore": {
               "target": "Package",
-              "version": "[2.76.0, )"
+              "version": "[2.57.0, )"
             },
             "Grpc.HealthCheck": {
               "target": "Package",
-              "version": "[2.76.0, )"
+              "version": "[2.57.0, )"
+            },
+            "Grpc.Tools": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.57.0, )"
             },
             "Microsoft.Extensions.Caching.StackExchangeRedis": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[8.0.0, )"
             },
             "Npgsql": {
               "target": "Package",
-              "version": "[10.0.1, )"
+              "version": "[7.0.4, )"
+            },
+            "StackExchange.Redis": {
+              "target": "Package",
+              "version": "[2.7.10, )"
             }
           },
           "imports": [

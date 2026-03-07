@@ -5,15 +5,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Grpc.AspNetCore" Version="2.76.0" />
-    <PackageReference Include="Grpc.HealthCheck" Version="2.76.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.2" />
-    <PackageReference Include="Google.Cloud.Spanner.Data" Version="5.12.0" />
-    <PackageReference Include="Npgsql" Version="10.0.1" />
-    <PackageReference Include="Google.Cloud.SecretManager.V1" Version="2.7.0" />
+    <!-- remove test files -->
+    <Compile Remove="tests/**/*.cs" />
+
+    <!-- remove cloud implementations causing dependency issues -->
+    <Compile Remove="cartstore/AlloyDBCartStore.cs" />
+    <Compile Remove="cartstore/SpannerCartStore.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="protos\Cart.proto" GrpcServices="Both" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
+    <PackageReference Include="Grpc.HealthCheck" Version="2.57.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.25.1" />
+    <PackageReference Include="Grpc.Tools" Version="2.57.0" PrivateAssets="All" />
+    <PackageReference Include="Npgsql" Version="7.0.4" />
+    <PackageReference Include="StackExchange.Redis" Version="2.7.10" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="protos/Cart.proto" GrpcServices="Server" />
+  </ItemGroup>
+
 </Project>
