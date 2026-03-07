@@ -21,7 +21,6 @@ adservice
 )
 
 echo "Logging into Quay"
-
 echo "$QUAY_PASS" | podman login quay.io -u "$QUAY_USER" --password-stdin
 
 for service in "${SERVICES[@]}"
@@ -30,7 +29,7 @@ do
     echo "Tagging image $service"
 
     podman tag \
-    $service:$VERSION \
+    localhost/$service:$VERSION \
     $QUAY_REGISTRY/$service:$VERSION
 
     echo "Pushing image $service"
@@ -40,4 +39,4 @@ do
 
 done
 
-echo "Image push completed"
+echo "All images pushed successfully"
