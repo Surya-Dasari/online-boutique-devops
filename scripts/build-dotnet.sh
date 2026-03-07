@@ -3,7 +3,7 @@ set -e
 
 echo "Building .NET service"
 
-cd src/cartservice/src
+cd src/cartservice
 
 dotnet restore
 dotnet build
