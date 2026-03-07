@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-QUAY_REGISTRY="quay.io/suryadasari"
+QUAY_REGISTRY="quay.io/suryadasari31"
 
 VERSION=${BUILD_NUMBER}-$(git rev-parse --short HEAD)
 
