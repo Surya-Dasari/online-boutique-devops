@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+VERSION=${BUILD_NUMBER}-$(git rev-parse --short HEAD)
+
 echo "Building Java service"
 
 cd src/adservice
@@ -9,6 +11,10 @@ chmod +x gradlew
 
 ./gradlew build -x verifyGoogleJavaFormat
 
-VERSION=$(git rev-parse --short HEAD)
+JAR=$(ls build/libs/*.jar | head -1)
 
-cp build/libs/*.jar adservice-${BUILD_NUMBER}-${VERSION}.jar
+cp $JAR adservice-${VERSION}.jar
+
+cd - > /dev/null
+
+echo "Java build completed"
