@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
 
-echo "Building container images"
+echo "Building container images in parallel"
+
+VERSION=${BUILD_NUMBER}-$(git rev-parse --short HEAD)
 
 SERVICES=(
 frontend
@@ -18,16 +20,23 @@ cartservice
 adservice
 )
 
-VERSION=${BUILD_NUMBER}-$(git rev-parse --short HEAD)
+build_image() {
 
-for service in "${SERVICES[@]}"
-do
-    echo "Building image for $service"
+    service=$1
+
+    echo "Building $service"
 
     podman build \
         -t $service:$VERSION \
         src/$service
 
+}
+
+for svc in "${SERVICES[@]}"
+do
+    build_image $svc &
 done
 
-echo "Image build completed"
+wait
+
+echo "All images built successfully"
