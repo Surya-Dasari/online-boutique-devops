@@ -106,7 +106,7 @@ stages {
         steps {
 
             withCredentials([usernamePassword(
-                credentialsId: 'quay-creds',
+                credentialsId: 'quay-robot-creds',
                 usernameVariable: 'QUAY_USER',
                 passwordVariable: 'QUAY_PASS'
             )]) {
