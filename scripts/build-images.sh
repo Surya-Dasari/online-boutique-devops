@@ -20,15 +20,23 @@ adservice
 
 echo "Building container images"
 
+pids=()
+
 for service in "${SERVICES[@]}"
 do
-    echo "Building image for $service"
+    echo "Building $service"
 
     podman build \
     -t localhost/$service:$VERSION \
     src/$service &
+
+    pids+=($!)
 done
 
-wait
+# wait for builds and detect failures
+for pid in "${pids[@]}"
+do
+    wait $pid
+done
 
 echo "All images built successfully"
