@@ -73,19 +73,20 @@ pipeline {
         }
 
         stage('SonarQube Scan') {
-            steps {
-                withSonarQubeEnv('SonarServer') {
-                    sh 'mvn sonar:sonar'
-                }
-            }
-        }
 
-        stage('Quality Gate') {
             steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
+
+                withCredentials([string(
+                    credentialsId: 'sonar-token',
+                    variable: 'SONAR_TOKEN'
+                )]) {
+
+                    sh './scripts/sonarqube-scan.sh'
+
                 }
+
             }
+
         }
 
         stage('Validate Artifacts') {
@@ -108,6 +109,7 @@ pipeline {
                 }
 
             }
+
         }
 
         stage('Cleanup Old Nexus Artifacts') {
@@ -124,6 +126,7 @@ pipeline {
                 }
 
             }
+
         }
 
         stage('Build Container Images') {
@@ -146,6 +149,7 @@ pipeline {
                 }
 
             }
+
         }
 
     }
