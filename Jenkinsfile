@@ -69,6 +69,8 @@ stages {
           )]) {
               sh './scripts/sonarqube-scan.sh'
           }
+        }
+    }
 
     stage('Validate Artifacts') {
         steps {
@@ -145,4 +147,3 @@ post {
 
 }
 
-}
