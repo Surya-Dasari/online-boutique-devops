@@ -1,13 +1,13 @@
 pipeline {
 
     agent any
-
+        
     options {
         timeout(time: 30, unit: 'MINUTES')
         disableConcurrentBuilds()
         timestamps()
     }
-
+        
     environment {
         NEXUS_URL = "http://localhost:8081/repository/ci-artifacts"
     }
@@ -72,11 +72,11 @@ pipeline {
             }
         }
 
-        stage('SonarQube Scan') {
+        stage('Sonar Scan (Non-Java)') {
 
             steps {
-
                 script {
+
                     def scannerHome = tool 'SonarScanner'
 
                     withCredentials([string(
@@ -84,18 +84,35 @@ pipeline {
                         variable: 'SONAR_TOKEN'
                     )]) {
 
-                       sh """
-${scannerHome}/bin/sonar-scanner \
--Dsonar.projectKey=online-boutique \
--Dsonar.sources=. \
--Dsonar.host.url=http://localhost:9000 \
--Dsonar.exclusions=**/*.java \
--Dsonar.token=$SONAR_TOKEN
-"""
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=online-boutique \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.exclusions=**/*.java \
+                        -Dsonar.token=$SONAR_TOKEN
+                        """
 
                     }
                 }
+            }
+        }
 
+        stage('Sonar Scan (Java)') {
+
+            steps {
+                dir('src/paymentservice') {
+                    sh 'mvn clean verify sonar:sonar'
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
 
@@ -119,6 +136,7 @@ ${scannerHome}/bin/sonar-scanner \
                 }
 
             }
+
         }
 
         stage('Cleanup Old Nexus Artifacts') {
@@ -135,6 +153,7 @@ ${scannerHome}/bin/sonar-scanner \
                 }
 
             }
+
         }
 
         stage('Build Container Images') {
@@ -157,6 +176,7 @@ ${scannerHome}/bin/sonar-scanner \
                 }
 
             }
+
         }
 
     }
