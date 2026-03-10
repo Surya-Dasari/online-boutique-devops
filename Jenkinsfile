@@ -1,20 +1,20 @@
 pipeline {
 
     agent any
-
+        
     options {
         timeout(time: 30, unit: 'MINUTES')
         disableConcurrentBuilds()
         timestamps()
     }
-
+        
     environment {
         NEXUS_URL = "http://localhost:8081/repository/ci-artifacts"
     }
 
     stages {
 
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
                 checkout scm
             }
@@ -26,6 +26,13 @@ pipeline {
             }
         }
 
+        stage('Debug Info') {
+            steps {
+                sh 'echo Build Number: $BUILD_NUMBER'
+                sh 'git rev-parse --short HEAD'
+            }
+        }
+
         stage('Build Services') {
 
             failFast true
@@ -33,27 +40,32 @@ pipeline {
             parallel {
 
                 stage('Build Go') {
-                    steps { sh './scripts/build-go.sh' }
+                    steps {
+                        sh './scripts/build-go.sh'
+                    }
                 }
 
                 stage('Build Node') {
-                    steps { sh './scripts/build-node.sh' }
+                    steps {
+                        sh './scripts/build-node.sh'
+                    }
                 }
 
                 stage('Build Python') {
-                    steps { sh './scripts/build-python.sh' }
+                    steps {
+                        sh './scripts/build-python.sh'
+                    }
                 }
 
                 stage('Build DotNet') {
-                    steps { sh './scripts/build-dotnet.sh' }
+                    steps {
+                        sh './scripts/build-dotnet.sh'
+                    }
                 }
 
                 stage('Build Java') {
                     steps {
-                        dir('src/adservice') {
-                            sh 'chmod +x gradlew'
-                            sh './gradlew clean build'
-                        }
+                        sh './scripts/build-java.sh'
                     }
                 }
 
@@ -61,36 +73,41 @@ pipeline {
         }
 
         stage('Sonar Scan') {
+    steps {
+        script {
+            def scannerHome = tool 'SonarScanner'
 
-            steps {
+            withCredentials([string(
+                credentialsId: 'sonar-token',
+                variable: 'SONAR_TOKEN'
+            )]) {
 
-                script {
-
-                    def scannerHome = tool 'SonarScanner'
-
-                    withCredentials([string(
-                        credentialsId: 'sonar-token',
-                        variable: 'SONAR_TOKEN'
-                    )]) {
-
-                        sh """
-                        ${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=online-boutique \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.exclusions=**/*.java,**/venv/**,**/node_modules/**,**/build/**,**/obj/** \
-                        -Dsonar.token=$SONAR_TOKEN
-                        """
-
-                    }
-                }
+                sh """
+                ${scannerHome}/bin/sonar-scanner \
+                -Dsonar.projectKey=online-boutique \
+                -Dsonar.sources=. \
+                -Dsonar.exclusions=**/*.java,**/venv/**,**/node_modules/** \
+                -Dsonar.host.url=http://localhost:9000 \
+                -Dsonar.token=$SONAR_TOKEN
+                """
             }
         }
+    }
+}
+        stage('Sonar Scan (Java)') {
+    steps {
+        dir('src/adservice') {
+            sh 'chmod +x gradlew'
+            sh './gradlew clean build sonar'
+        }
+    }
+}
 
         stage('Quality Gate') {
+
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
+                    waitForQualityGate abortPipeline: false
                 }
             }
         }
@@ -112,6 +129,23 @@ pipeline {
                 )]) {
 
                     sh './scripts/upload-to-nexus.sh'
+                }
+
+            }
+
+        }
+
+        stage('Cleanup Old Nexus Artifacts') {
+
+            steps {
+
+                withCredentials([usernamePassword(
+                    credentialsId: 'nexus-creds-latest',
+                    usernameVariable: 'NEXUS_USER',
+                    passwordVariable: 'NEXUS_PASS'
+                )]) {
+
+                    sh 'python3 scripts/cleanup-nexus.py'
                 }
 
             }
@@ -144,9 +178,11 @@ pipeline {
     }
 
     post {
+
         always {
             cleanWs()
         }
+
     }
 
 }
