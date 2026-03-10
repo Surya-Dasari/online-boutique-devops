@@ -2,6 +2,10 @@ pipeline {
 
 agent any
 
+tools {
+  sonarQubeScanner 'SonarScanner'
+}
+        
 options {
         timeout(time: 30, unit: 'MINUTES')
         disableConcurrentBuilds()
