@@ -4,6 +4,8 @@ agent any
 
 options {
         timeout(time: 30, unit: 'MINUTES')
+        disableConcurrentBuilds()
+        timestamps()
 
 environment {
     NEXUS_URL = "http://localhost:8081/repository/ci-artifacts"
