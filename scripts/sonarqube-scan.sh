@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Starting SonarQube Scan ..."
+echo "Starting SonarQube Scan..."
 
 sonar-scanner \
 -Dsonar.projectKey=online-boutique \
