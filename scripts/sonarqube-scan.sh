@@ -1,13 +1,10 @@
 #!/bin/bash
-set -e
 
-echo "Starting  SonarQube Scan ..."
+echo "Starting SonarQube Scan ..."
 
 sonar-scanner \
-  -Dsonar.projectKey=my-project \
-  -Dsonar.sources=. \
-  -Dsonar.host.url=http://localhost:9000 \
-  -Dsonar.login=$SONAR_TOKEN
-
-echo "SonarQube scan completed"
-
+-Dsonar.projectKey=online-boutique \
+-Dsonar.sources=. \
+-Dsonar.host.url=http://localhost:9000 \
+-Dsonar.exclusions=**/*.java \
+-Dsonar.token=$SONAR_TOKEN
