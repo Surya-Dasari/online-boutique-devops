@@ -35,31 +35,32 @@ stages {
 
     stage('Build Services') {
 
-        parallel failFast: true {
+    failFast true
 
-            stage('Build Go') {
-                steps { sh './scripts/build-go.sh' }
-            }
+    parallel {
 
-            stage('Build Node') {
-                steps { sh './scripts/build-node.sh' }
-            }
+        stage('Build Go') {
+            steps { sh './scripts/build-go.sh' }
+        }
 
-            stage('Build Python') {
-                steps { sh './scripts/build-python.sh' }
-            }
+        stage('Build Node') {
+            steps { sh './scripts/build-node.sh' }
+        }
 
-            stage('Build DotNet') {
-                steps { sh './scripts/build-dotnet.sh' }
-            }
+        stage('Build Python') {
+            steps { sh './scripts/build-python.sh' }
+        }
 
-            stage('Build Java') {
-                steps { sh './scripts/build-java.sh' }
-            }
+        stage('Build DotNet') {
+            steps { sh './scripts/build-dotnet.sh' }
+        }
 
+        stage('Build Java') {
+            steps { sh './scripts/build-java.sh' }
         }
 
     }
+}
 
     stage('SonarQube Scan') {
         steps {
