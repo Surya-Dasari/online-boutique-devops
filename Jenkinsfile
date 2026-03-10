@@ -89,7 +89,7 @@ pipeline {
                         -Dsonar.projectKey=online-boutique \
                         -Dsonar.sources=. \
                         -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.exclusions=**/*.java \
+                        -Dsonar.exclusions=**/*.java,**/venv/**,**/node_modules/**
                         -Dsonar.token=$SONAR_TOKEN
                         """
 
@@ -99,13 +99,12 @@ pipeline {
         }
 
         stage('Sonar Scan (Java)') {
-
-            steps {
-                dir('src/paymentservice') {
-                    sh 'mvn clean verify sonar:sonar'
-                }
-            }
+    steps {
+        dir('src/paymentservice') {
+            sh './gradlew clean build sonar'
         }
+    }
+}
 
         stage('Quality Gate') {
 
