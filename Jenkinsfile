@@ -2,6 +2,9 @@ pipeline {
 
 agent any
 
+options {
+        timeout(time: 30, unit: 'MINUTES')
+
 environment {
     NEXUS_URL = "http://localhost:8081/repository/ci-artifacts"
 }
