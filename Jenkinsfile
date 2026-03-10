@@ -1,13 +1,13 @@
 pipeline {
 
     agent any
-        
+
     options {
         timeout(time: 30, unit: 'MINUTES')
         disableConcurrentBuilds()
         timestamps()
     }
-        
+
     environment {
         NEXUS_URL = "http://localhost:8081/repository/ci-artifacts"
     }
@@ -76,17 +76,26 @@ pipeline {
 
             steps {
 
-                withCredentials([string(
-                    credentialsId: 'sonar-token',
-                    variable: 'SONAR_TOKEN'
-                )]) {
+                script {
+                    def scannerHome = tool 'SonarScanner'
 
-                    sh './scripts/sonarqube-scan.sh'
+                    withCredentials([string(
+                        credentialsId: 'sonar-token',
+                        variable: 'SONAR_TOKEN'
+                    )]) {
 
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=online-boutique \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=$SONAR_TOKEN
+                        """
+
+                    }
                 }
 
             }
-
         }
 
         stage('Validate Artifacts') {
@@ -109,7 +118,6 @@ pipeline {
                 }
 
             }
-
         }
 
         stage('Cleanup Old Nexus Artifacts') {
@@ -126,7 +134,6 @@ pipeline {
                 }
 
             }
-
         }
 
         stage('Build Container Images') {
@@ -149,7 +156,6 @@ pipeline {
                 }
 
             }
-
         }
 
     }
