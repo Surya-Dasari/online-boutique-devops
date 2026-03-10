@@ -67,7 +67,7 @@ stages {
             credentialsId: 'sonar-token',
             variable: 'SONAR_TOKEN'
           )]) {
-              \sh './scripts/sonarqube-scan.sh'
+              sh './scripts/sonarqube-scan.sh'
           }
 
     stage('Validate Artifacts') {
