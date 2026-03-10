@@ -1,10 +1,6 @@
 pipeline {
 
 agent any
-
-tools {
-  sonarRunner 'SonarScanner'
-}
         
 options {
         timeout(time: 30, unit: 'MINUTES')
@@ -67,15 +63,12 @@ stages {
 }
 
     stage('SonarQube Scan') {
-        steps {
-          withCredentials([string(
-            credentialsId: 'sonar-token',
-            variable: 'SONAR_TOKEN'
-          )]) {
-              sh './scripts/sonarqube-scan.sh'
-          }
+    steps {
+        withSonarQubeEnv('SonarServer') {
+            sh 'mvn sonar:sonar'
         }
     }
+}
 
     stage('Validate Artifacts') {
         steps {
