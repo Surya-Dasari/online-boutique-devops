@@ -94,14 +94,7 @@ pipeline {
         }
     }
 }
-        stage('Sonar Scan (Java)') {
-    steps {
-        dir('src/adservice') {
-            sh 'chmod +x gradlew'
-            sh './gradlew clean build sonar'
-        }
-    }
-}
+       
 
         stage('Quality Gate') {
 
