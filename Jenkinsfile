@@ -29,7 +29,7 @@ stages {
 
     stage('Build Services') {
 
-        parallel {
+        parallel failFast: true {
 
             stage('Build Go') {
                 steps { sh './scripts/build-go.sh' }
