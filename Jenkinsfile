@@ -60,6 +60,15 @@ stages {
 
     }
 
+    stage('SonarQube Scan') {
+        steps {
+          withCredentials([string(
+            credentialsId: 'sonar-token',
+            variable: 'SONAR_TOKEN'
+          )]) {
+              \sh './scripts/sonarqube-scan.sh'
+          }
+
     stage('Validate Artifacts') {
         steps {
             sh 'python3 scripts/validate_artifacts.py'
